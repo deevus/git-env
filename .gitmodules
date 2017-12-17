@@ -1,9 +1,0 @@
-[submodule "lib/luash"]
-	path = lib/luash
-	url = https://github.com/zserge/luash
-[submodule "lib/argparse"]
-	path = lib/argparse
-	url = https://github.com/mpeterv/argparse/
-[submodule "lib/Penlight"]
-	path = lib/Penlight
-	url = https://github.com/stevedonovan/Penlight
