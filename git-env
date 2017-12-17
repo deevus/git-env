@@ -1,0 +1,42 @@
+#!/bin/lua
+local sh       = require('lib.luash.sh');
+local argparse = require('lib.argparse.src.argparse')
+local path     = require('lib.penlight.lua.pl.path')
+local pretty   = require('lib.penlight.lua.pl.pretty')
+local dir      = require('lib.penlight.lua.pl.dir')
+
+local homeDir    = os.getenv('HOME') or os.getenv('USERPROFILE');
+local gitEnvHome = path.join(homeDir, '.git-env');
+commands   = {
+    git    = sh.command('git');
+    gitEnv = sh.command('git', '--git-dir', gitEnvHome);
+};
+
+local parser = argparse()
+    :name 'git-env'
+    :description 'Create and manage environments on top of your existing git repositories'
+
+parser:command()
+    :name 'init'
+    :description 'Create an empty git-env repository for the current git repository'
+    :action(function ()
+        local origin = tostring(commands.git('remote', 'get-url', 'origin'))
+        local target = path.join(gitEnvHome, origin)
+        print('Creating git-env repository ' .. target)
+        dir.makepath(target)
+    end)
+
+parser:command()
+    :name 'status'
+    :description 'Show the working tree status of the git-env repository'
+    :action(function()
+        print(commands.gitEnv('status'))
+    end)
+
+parser:command()
+    :name 'config'
+    :description 'Configure git-env'
+
+local args = parser:parse();
+
+print(pretty.write(args));
